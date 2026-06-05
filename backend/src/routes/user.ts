@@ -1,11 +1,57 @@
-import { Hono } from "hono"
+import { Hono } from "hono";
+import { getPrismaClient } from "../prisma";
+import { sign } from "hono/jwt";
 
-const router = new Hono()
 
-router.post('/signup', (c) => {
-    
+const userRouter = new Hono<{
+    Bindings: {
+        DATABASE_URL: string;
+        JWT_SECRET: string;
+    }
+}>();
+
+userRouter.post('/signup', async (c) => {
+    const prisma = getPrismaClient(c.env.DATABASE_URL);
+    const { email, password } = await c.req.json();
+
+    const user = await prisma.user.create({
+        data: {
+            email,
+            password
+        }
+    });
+
+    const token = await sign({ id: user.id }, c.env.JWT_SECRET);
+
+    return c.json({
+        token,
+        message: "You are signed up successfully"
+    })
+
 })
 
-router.post('/signin', (c) => {
+userRouter.post('/signin', async (c) => {
+    const prisma = getPrismaClient(c.env.DATABASE_URL);
+    const { email, password } = await c.req.json();
 
+    const user = await prisma.user.findFirst({
+        where: {
+            email,
+            password
+        }
+    });
+
+    if (!user) {
+        c.status(403);
+        return c.json({
+            message: "User doesn't exist"
+        })
+    }
+
+    const token = await sign({id: user.id}, c.env.JWT_SECRET);
+
+    return c.json({
+        token,
+        message: "You are signed in successfully"
+    })
 })
