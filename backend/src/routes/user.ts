@@ -14,6 +14,17 @@ userRouter.post('/signup', async (c) => {
     const prisma = getPrismaClient(c.env.DATABASE_URL);
     const { email, password } = await c.req.json();
 
+    const existingUser = await prisma.user.findFirst({
+        where: { email }
+    });
+
+    if (existingUser) {
+        c.status(409);
+        return c.json({
+            message: "User already exists"
+        })
+    }
+
     const user = await prisma.user.create({
         data: {
             email,
@@ -48,10 +59,12 @@ userRouter.post('/signin', async (c) => {
         })
     }
 
-    const token = await sign({id: user.id}, c.env.JWT_SECRET);
+    const token = await sign({ id: user.id }, c.env.JWT_SECRET);
 
     return c.json({
         token,
         message: "You are signed in successfully"
     })
 })
+
+export default userRouter;
