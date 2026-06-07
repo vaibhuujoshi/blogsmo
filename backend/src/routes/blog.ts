@@ -1,6 +1,6 @@
 import { Hono } from "hono";
-import { getPrismaClient } from "../prisma";
 import { verify } from "hono/jwt";
+import { prismaType } from "..";
 
 const blogRouter = new Hono<{
     Bindings: {
@@ -8,7 +8,8 @@ const blogRouter = new Hono<{
         JWT_SECRET: string;
     },
     Variables: {
-        userId: string
+        userId: string,
+        prisma: prismaType
     }
 }>();
 
@@ -35,7 +36,7 @@ blogRouter.use('/*', async (c, next) => {
 
 
 blogRouter.post('/', async (c) => {
-    const prisma = getPrismaClient(c.env.DATABASE_URL);
+    const prisma = c.get("prisma");
 
     const { title, content } = await c.req.json();
     const userId = c.get('userId');
@@ -60,7 +61,7 @@ blogRouter.post('/', async (c) => {
 })
 
 blogRouter.put('/', async (c) => {
-    const prisma = getPrismaClient(c.env.DATABASE_URL);
+    const prisma = c.get("prisma");
 
     const body = await c.req.json();
     const userId = c.get('userId');
@@ -84,11 +85,11 @@ blogRouter.put('/', async (c) => {
     } catch (error) {
         return c.json({ error: "Failed to create blog post" }, 500);
     }
-    
+
 })
 
 blogRouter.get('/bulk', async (c) => {
-    const prisma = getPrismaClient(c.env.DATABASE_URL);
+    const prisma = c.get("prisma");
 
     try {
         const blogs = await prisma.post.findMany();
@@ -99,7 +100,7 @@ blogRouter.get('/bulk', async (c) => {
 })
 
 blogRouter.get('/:id', async (c) => {
-    const prisma = getPrismaClient(c.env.DATABASE_URL);
+    const prisma = c.get("prisma");
 
     const id = c.req.param('id');
 
@@ -111,6 +112,34 @@ blogRouter.get('/:id', async (c) => {
         }
 
         return c.json({ blog });
+    } catch (error) {
+        return c.json({ error: "Failed to fetch blog" }, 500);
+    }
+})
+
+blogRouter.delete('/:id', async (c) => {
+    const prisma = c.get("prisma");
+
+    const id = c.req.param('id');
+    const userId = c.get('userId');
+
+    try {
+        const deleteOperation = await prisma.post.deleteMany({
+            where: {
+                id: id,
+                authorId: userId
+            }
+        })
+
+        if (deleteOperation.count === 0) {
+            const blogExists = await prisma.post.findUnique({ where: { id } })
+            if (!blogExists) return c.json({ error: "Blog post not found" }, 404)
+            return c.json({ error: "You are not allowed to delete this blog" }, 403)
+        }
+
+        await prisma.post.delete({ where: { id } });
+
+        return c.json
     } catch (error) {
         return c.json({ error: "Failed to fetch blog" }, 500);
     }
