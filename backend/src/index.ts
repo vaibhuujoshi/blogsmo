@@ -1,7 +1,7 @@
 import { Hono } from 'hono'
 import userRouter from './routes/user';
 import blogRouter from './routes/blog';
-import { getPrismaClient } from './prisma';
+import { getPrismaClient } from './db/prisma';
 
 type Env = {
   Bindings: {
