@@ -1,17 +1,20 @@
 import { Hono } from "hono";
-import { getPrismaClient } from "../prisma";
 import { sign, verify } from "hono/jwt";
 import bcrypt from "bcryptjs";
+import { prismaType } from "..";
 
 const userRouter = new Hono<{
     Bindings: {
         DATABASE_URL: string;
         JWT_SECRET: string;
+    },
+    Variables: {
+        prisma: prismaType
     }
 }>();
 
 userRouter.post('/signup', async (c) => {
-    const prisma = getPrismaClient(c.env.DATABASE_URL);
+    const prisma = c.get("prisma");
     const { email, password } = await c.req.json();
 
     const existingUser = await prisma.user.findFirst({
@@ -44,7 +47,7 @@ userRouter.post('/signup', async (c) => {
 })
 
 userRouter.post('/signin', async (c) => {
-    const prisma = getPrismaClient(c.env.DATABASE_URL);
+    const prisma = c.get("prisma");
     const { email, password } = await c.req.json();
 
     const user = await prisma.user.findFirst({
@@ -75,7 +78,7 @@ userRouter.post('/signin', async (c) => {
 })
 
 userRouter.get('/profile', async (c) => {
-    const prisma = getPrismaClient(c.env.DATABASE_URL);
+    const prisma = c.get("prisma");
     const authHeader = c.req.header('Authorization');
 
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
