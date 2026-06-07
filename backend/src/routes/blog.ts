@@ -137,9 +137,9 @@ blogRouter.delete('/:id', async (c) => {
             return c.json({ error: "You are not allowed to delete this blog" }, 403)
         }
 
-        await prisma.post.delete({ where: { id } });
-
-        return c.json
+        return c.json({
+            message: `Blog deleted, id: ${id}`
+        })
     } catch (error) {
         return c.json({ error: "Failed to fetch blog" }, 500);
     }
