@@ -3,7 +3,6 @@ generator client {
   output     = "../src/generated/prisma"
   engineType = "client"
   runtime    = "workerd"
-  // previewFeatures = ["driverAdapters"]
 }
 
 datasource db {
@@ -15,6 +14,8 @@ model User {
   email    String  @unique
   name     String?
   password String
+  avatarUrl String @default("https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg")
+  bio String?
   posts    Post[]
 }
 
@@ -25,4 +26,7 @@ model Post {
   published Boolean @default(false)
   author    User    @relation(fields: [authorId], references: [id])
   authorId  String
+  date DateTime @default(now())
+  thumbnailUrl String @default("https://ionicframework.com/docs/img/demos/thumbnail.svg")
+  tag String?
 }
