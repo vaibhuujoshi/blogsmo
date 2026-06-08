@@ -1,6 +1,6 @@
 interface AuthorCardProps {
   name: string;
-  bio: string;
+  bio?: string;
   avatarUrl?: string;
 }
 
