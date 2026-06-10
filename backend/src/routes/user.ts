@@ -2,7 +2,7 @@ import { Hono } from "hono";
 import { sign, verify } from "hono/jwt";
 import { z } from "zod";
 import { zValidator } from "@hono/zod-validator";
-import { setCookie, getCookie } from "hono/cookie"; 
+import { setCookie, getCookie } from "hono/cookie";
 import bcrypt from "bcryptjs";
 import { prismaType } from "..";
 import { authSchema } from "../validators/authValidators";
@@ -26,7 +26,7 @@ userRouter.post('/signup', zValidator('json', authSchema), async (c) => {
 
     const hashedPassword = await bcrypt.hash(password, 12);
     const user = await prisma.user.create({
-        data: { email, password: hashedPassword }
+        data: { name, email, password: hashedPassword }
     });
 
     const token = await sign({ id: user.id }, c.env.JWT_SECRET);
