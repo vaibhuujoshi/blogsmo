@@ -4,6 +4,7 @@ import { z } from "zod";
 import { zValidator } from "@hono/zod-validator";
 import { getCookie } from "hono/cookie";
 import { prismaType } from "..";
+import { createBlogSchema, updateBlogSchema } from "../validators/blogValidators";
 
 const blogRouter = new Hono<{
     Bindings: {
@@ -15,28 +16,6 @@ const blogRouter = new Hono<{
         prisma: prismaType
     }
 }>();
-
-const createBlogSchema = z.object({
-    title: z.string().min(1, { message: "Title is required" }),
-    content: z.string().min(1, { message: "Content is required" }),
-    thumbnailUrl: z.string().url({ message: "Invalid thumbnail URL" })
-        .optional()
-        .or(z.literal(""))
-        .transform(val => val === "" ? undefined : val),
-    tag: z.string().nullable().optional()
-});
-
-const updateBlogSchema = z.object({
-    id: z.string().uuid({ message: "Invalid post ID format" }),
-    title: z.string().min(1, { message: "Title cannot be empty" }).optional(),
-    content: z.string().min(1, { message: "Content cannot be empty" }).optional(),
-    published: z.boolean().optional(),
-    thumbnailUrl: z.string().url({ message: "Invalid thumbnail URL" })
-        .optional()
-        .or(z.literal(""))
-        .transform(val => val === "" ? undefined : val),
-    tag: z.string().nullable().optional()
-});
 
 const paramSchema = z.object({
     id: z.string().uuid({ message: "Invalid post ID parameter format" })
