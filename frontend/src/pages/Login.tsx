@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Button } from "../components/Button";
 import { InputBox } from "../components/InputBox";
 import { Testimonial } from "../components/Testimonial";
+import { useNavigate } from "react-router-dom";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -11,6 +12,8 @@ export default function LoginPage() {
     e.preventDefault();
     console.log("Login Attempt:", { email, password });
   };
+
+  const navigate = useNavigate();
 
   return (
     <div className="min-h-screen w-full grid grid-cols-1 lg:grid-cols-2 bg-white">
@@ -23,7 +26,7 @@ export default function LoginPage() {
             <h1 className="text-4xl font-bold text-black tracking-tight mb-2">Login</h1>
             <p className="text-sm text-gray-500">
               Don't have an account?{" "}
-              <a href="/signup" className="underline hover:text-black transition-colors">Sign up</a>
+              <span onClick={() => navigate('/signup')} className="underline hover:text-black transition-colors cursor-pointer">Sign up</span>
             </p>
           </div>
 

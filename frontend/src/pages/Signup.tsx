@@ -2,16 +2,19 @@ import { useState } from "react";
 import { Button } from "../components/Button";
 import { Testimonial } from "../components/Testimonial";
 import { InputBox } from "../components/InputBox";
+import { useNavigate } from "react-router-dom";
 
 export default function SignUpPage() {
-    const [username, setUsername] = useState("");
+    const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        console.log({ username, email, password });
+        console.log({ name, email, password });
     };
+
+    const navigate = useNavigate();
 
     return (
         <div className="min-h-screen w-full grid grid-cols-1 lg:grid-cols-2 bg-white">
@@ -27,19 +30,19 @@ export default function SignUpPage() {
                         </h1>
                         <p className="text-sm text-gray-500">
                             Already have an account?{" "}
-                            <a href="/login" className="underline hover:text-black transition-colors">
+                            <span onClick={() => navigate('/login')} className="underline hover:text-black transition-colors cursor-pointer">
                                 Login
-                            </a>
+                            </span>
                         </p>
                     </div>
 
                     {/* Form */}
                     <form onSubmit={handleSubmit} className="flex flex-col gap-4">
                         <InputBox
-                            label="Username"
-                            placeholder="Enter your username"
-                            value={username}
-                            onChange={(e) => setUsername(e.target.value)}
+                            label="Name"
+                            placeholder="Enter your name"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
                         />
                         <InputBox
                             label="Email"
