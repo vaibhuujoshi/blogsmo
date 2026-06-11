@@ -2,6 +2,7 @@ import { Hono } from 'hono'
 import userRouter from './routes/user';
 import blogRouter from './routes/blog';
 import { getPrismaClient } from './db/prisma';
+import { cors } from 'hono/cors';
 
 type Env = {
   Bindings: {
@@ -16,6 +17,15 @@ type Env = {
 export type prismaType = ReturnType<typeof getPrismaClient>;
 
 const app = new Hono<Env>();
+
+app.use(
+  '*',
+  cors({
+    origin: 'http://localhost:5173',
+    allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    credentials: true,
+  })
+)
 
 app.use('*', async (c, next) => {
   const prismaInstance = getPrismaClient(c.env.DATABASE_URL)
