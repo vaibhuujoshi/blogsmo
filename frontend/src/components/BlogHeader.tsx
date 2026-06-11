@@ -10,7 +10,7 @@ export function BlogHeader({ title, date }: BlogHeaderProps) {
         {title}
       </h1>
       <p className="text-sm text-gray-400 font-normal">
-        Posted on {date}
+        Posted {date}
       </p>
     </div>
   );

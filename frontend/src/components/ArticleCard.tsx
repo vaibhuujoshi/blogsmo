@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import { formatDate } from "../lib/blogUtils";
 
 export interface ArticleData {
   id: string;
@@ -11,7 +12,6 @@ export interface ArticleData {
   content: string;
   thumbnailUrl: string;
   tag: string;
-  readingTime: string;
 }
 
 interface ArticleCardProps {
@@ -30,15 +30,15 @@ export function ArticleCard({ article }: ArticleCardProps) {
         {/* Author Header Row */}
         <div className="flex items-center gap-2 text-xs text-gray-600 font-normal">
           <img 
-            src={article.author.avatarUrl} 
-            alt={article.author.name} 
+            src={"https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg"} 
+            alt={"yoyo"} 
             className="w-5 h-5 rounded-full object-cover"
           />
           <span className="text-black font-medium hover:underline cursor-pointer">
-            {article.author.name}
+            {"yoyo"}
           </span>
           <span className="text-gray-300">•</span>
-          <span>{article.date}</span>
+          <span>{formatDate(article.date) + " ago"}</span>
         </div>
 
         {/* Title and content */}
@@ -57,7 +57,7 @@ export function ArticleCard({ article }: ArticleCardProps) {
             <span className="bg-gray-100 hover:bg-gray-200 text-gray-800 px-2.5 py-1 rounded-full cursor-pointer transition-colors">
               {article.tag}
             </span>
-            <span>{article.readingTime}</span>
+            <span>{Math.ceil(Math.random() * 10) + " min read"}</span>
           </div>
           
           {/* Action Icons Panel */}
@@ -83,7 +83,7 @@ export function ArticleCard({ article }: ArticleCardProps) {
       </div>
 
       {/* Right Column: Image Thumbnail */}
-      <div className="w-[100px] h-[100px] sm:w-[120px] sm:h-[120px] md:w-[160px] md:h-[110px] bg-gray-50 rounded-xs overflow-hidden cursor-pointer shrink-0">
+      <div className="w-25 h-25 sm:w-30 sm:h-30 md:w-40 md:h-27.5 bg-gray-50 rounded-xs overflow-hidden cursor-pointer shrink-0">
         <img 
           src={article.thumbnailUrl} 
           alt="Article cover" 
