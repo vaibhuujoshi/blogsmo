@@ -56,7 +56,7 @@ export default function Navbar() {
 
             {/* Profile Section Pin */}
             <div 
-              onClick={() => handleNavigation("/profile")}
+              onClick={() => handleNavigation("/login")}
               className={`flex items-center gap-2 cursor-pointer group transition-all p-1 rounded-full ${
                 isActive("/profile") ? "ring-2 ring-black" : "hover:bg-gray-50"
               }`}
