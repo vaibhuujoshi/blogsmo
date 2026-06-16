@@ -14,8 +14,7 @@ export default function SignUpPage() {
     
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        SignupUser(email, password, name);
-        navigate('/feed');
+        SignupUser(email, password, name).then(() => navigate('/feed'));
     };
     return (
         <div className="min-h-screen w-full grid grid-cols-1 lg:grid-cols-2 bg-white">

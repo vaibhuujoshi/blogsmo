@@ -11,8 +11,7 @@ export default function LoginPage() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    LoginUser(email, password);
-    navigate('/feed');
+    LoginUser(email, password).then(() => navigate('/feed'));
   };
 
   const navigate = useNavigate();
