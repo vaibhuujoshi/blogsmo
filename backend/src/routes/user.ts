@@ -33,15 +33,16 @@ userRouter.post('/signup', zValidator('json', authSchema), async (c) => {
 
     setCookie(c, "token", token, {
         httpOnly: true,
-        secure: false, // Requires HTTPS (disable this if testing on local http:// localhost)
-        sameSite: "Strict",
+        secure: true, // Requires HTTPS (disable this if testing on local http:// localhost)
+        sameSite: "None",
+        partitioned: true,
         maxAge: 60 * 60 * 24
     });
 
     return c.json({ message: "You are signed up successfully" }, 200);
 });
 
-userRouter.post('/signin', zValidator('json', authSchema.omit({ name: true })), async (c) => {
+userRouter.post('/login', zValidator('json', authSchema.omit({ name: true })), async (c) => {
     const prisma = c.get("prisma");
     const { email, password } = c.req.valid('json');
 
@@ -56,7 +57,8 @@ userRouter.post('/signin', zValidator('json', authSchema.omit({ name: true })), 
     setCookie(c, "token", token, {
         httpOnly: true,
         secure: true,
-        sameSite: "Strict",
+        sameSite: "None",
+        partitioned: true,
         maxAge: 60 * 60 * 24
     });
 
