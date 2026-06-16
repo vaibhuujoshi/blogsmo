@@ -21,7 +21,7 @@ const app = new Hono<Env>();
 app.use(
   '*',
   cors({
-    origin: 'http://localhost:5173',
+    origin: 'https://blogsmo.vercel.app',
     allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     credentials: true,
   })
