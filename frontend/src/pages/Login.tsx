@@ -3,6 +3,7 @@ import { Button } from "../components/Button";
 import { InputBox } from "../components/InputBox";
 import { Testimonial } from "../components/Testimonial";
 import { useNavigate } from "react-router-dom";
+import LoginUser from "../api/login";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -10,7 +11,8 @@ export default function LoginPage() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Login Attempt:", { email, password });
+    LoginUser(email, password);
+    navigate('/feed');
   };
 
   const navigate = useNavigate();

@@ -3,19 +3,20 @@ import { Button } from "../components/Button";
 import { Testimonial } from "../components/Testimonial";
 import { InputBox } from "../components/InputBox";
 import { useNavigate } from "react-router-dom";
+import SignupUser from "../api/signup";
 
 export default function SignUpPage() {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
+    const navigate = useNavigate();
+    
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        console.log({ name, email, password });
+        SignupUser(email, password, name);
+        navigate('/feed');
     };
-
-    const navigate = useNavigate();
-
     return (
         <div className="min-h-screen w-full grid grid-cols-1 lg:grid-cols-2 bg-white">
 
