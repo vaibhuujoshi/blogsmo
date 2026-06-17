@@ -16,19 +16,19 @@ export default function WritePage() {
   const handlePublish = () => {
     // In a real app, you would parse the comma-separated tags here
     // const formattedTags = tags.split(",").map(tag => tag.trim()).filter(Boolean);
-    
-    createPost(title, content, thumbnailUrl, tags);
+
+    createPost(title, content, thumbnailUrl, tags)
+      .then(() => navigate('/feed'));
     alert("Post published!");
-    navigate('/feed');
   };
 
   return (
     <div className="min-h-screen w-full bg-white text-gray-900 font-sans flex flex-col lg:flex-row">
-      
+
       {/* Main Editor Section (Takes up remaining space) */}
       <main className="flex-1 w-full flex justify-center">
         <StoryEditor
-          title={title} 
+          title={title}
           setTitle={setTitle}
           content={content}
           setContent={setContent}
