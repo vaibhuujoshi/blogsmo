@@ -2,12 +2,20 @@ import { useEffect, useState } from "react";
 import { ArticleCard, type ArticleData } from "../components/ArticleCard";
 import { getAllPosts } from "../api/post";
 import { ArticleCardSkeleton } from "../components/skeletons/ArticleCard";
+import { useNavigate } from "react-router-dom";
 
 export default function HomeFeedPage() {
   const [posts, setPosts] = useState<ArticleData[]>([]);
 
+  const navigate = useNavigate();
+
   useEffect(() => {
-    getAllPosts().then(data => setPosts(data || []));
+    getAllPosts().then(data => {
+      setPosts(data || []);
+      if (data.length == 0) {
+        navigate('/login');
+      }
+    });
   }, []);
 
   return (
