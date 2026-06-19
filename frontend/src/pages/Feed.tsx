@@ -12,7 +12,7 @@ export default function HomeFeedPage() {
   useEffect(() => {
     getAllPosts().then(data => {
       setPosts(data || []);
-      if (data.length == 0) {
+      if (data == undefined) {
         navigate('/login');
       }
     });
