@@ -118,7 +118,7 @@ export default function Navbar() {
           
           {/* Mobile Profile Link Element */}
           <button
-            onClick={() => handleNavigation("/profile")}
+            onClick={() => handleNavigation("/login")}
             className={`w-full text-left py-2 px-3 rounded-md text-base font-medium flex items-center gap-3 ${
               isActive("/profile") ? "bg-gray-50 text-black font-semibold" : "text-gray-600 hover:bg-gray-50"
             }`}
